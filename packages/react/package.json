@@ -1,7 +1,7 @@
 {
   "name": "@reflow/react",
   "version": "0.1.0",
-  "description": "The fastest, most beautiful React library for building node-based UIs. Fine-grained rendering, built-in auto-layout, undo/redo, alignment guides — free and open source.",
+  "description": "The fastest, most beautiful React library for building node-based UIs. Fine-grained rendering, built-in auto-layout, undo/redo, alignment guides \u2014 free and open source.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -44,5 +44,12 @@
     "diagram",
     "workflow",
     "dag"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olbboy/reflow.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://github.com/olbboy/reflow#readme",
+  "bugs": "https://github.com/olbboy/reflow/issues"
 }

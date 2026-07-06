@@ -261,6 +261,7 @@ export class FlowStore {
     });
     this.recording = true;
     this.redoStack.push(entry);
+    this.cull();
     this.emit('history');
     this.commit();
   }
@@ -274,6 +275,7 @@ export class FlowStore {
     });
     this.recording = true;
     this.undoStack.push(entry);
+    this.cull();
     this.emit('history');
     this.commit();
   }
@@ -442,6 +444,7 @@ export class FlowStore {
     this.batch(() => {
       for (const n of copies) this._insertNode(n);
     });
+    this.cull();
     this.record('add nodes', {
       undo: () =>
         this.batch(() => {
@@ -501,6 +504,7 @@ export class FlowStore {
       for (const r of reparented) this._replaceNode(r.after);
       for (const id of doomed) this._removeNode(id);
     });
+    this.cull();
     this.record('remove nodes', {
       undo: () =>
         this.batch(() => {
@@ -565,6 +569,7 @@ export class FlowStore {
     this.batch(() => {
       for (const e of fresh) this._insertEdge(e);
     });
+    this.cull();
     this.record('add edges', {
       undo: () =>
         this.batch(() => {
@@ -590,6 +595,7 @@ export class FlowStore {
     this.batch(() => {
       for (const e of removed) this._removeEdge(e.id);
     });
+    this.cull();
     this.record('remove edges', {
       undo: () =>
         this.batch(() => {
@@ -644,6 +650,7 @@ export class FlowStore {
       }
       this.emit('selection');
     });
+    this.cull();
     this.recording = true;
   }
 

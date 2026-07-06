@@ -26,5 +26,12 @@
     "diagram",
     "headless",
     "workflow"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olbboy/reflow.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/olbboy/reflow#readme",
+  "bugs": "https://github.com/olbboy/reflow/issues"
 }
