@@ -1,0 +1,48 @@
+{
+  "name": "@reflow/react",
+  "version": "0.1.0",
+  "description": "The fastest, most beautiful React library for building node-based UIs. Fine-grained rendering, built-in auto-layout, undo/redo, alignment guides — free and open source.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && cp src/styles.css dist/styles.css"
+  },
+  "dependencies": {
+    "@reflow/core": "0.1.0"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "keywords": [
+    "react",
+    "node-based-ui",
+    "react-flow-alternative",
+    "graph",
+    "flow",
+    "diagram",
+    "workflow",
+    "dag"
+  ]
+}

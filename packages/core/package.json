@@ -1,0 +1,30 @@
+{
+  "name": "@reflow/core",
+  "version": "0.1.0",
+  "description": "Headless, zero-dependency engine for node-based UIs: reactive graph store, spatial indexing, auto-layout, undo/redo, interactions.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "keywords": [
+    "node-based-ui",
+    "graph",
+    "flow",
+    "diagram",
+    "headless",
+    "workflow"
+  ]
+}
