@@ -274,11 +274,11 @@ React Flow app runs on ReFlow's engine (undo/redo and culling included, free):
 Every performance claim here is backed by a reproducible benchmark, and
 every feature by a passing test. [CLAIMS.md](./CLAIMS.md) is a line-by-line
 audit of this README against the code; [PROGRESS.md](./PROGRESS.md) tracks
-what's done vs. what's still open. Honestly still open and labelled as such:
-visual-regression tests, and a *live* Anthropic-API AI demo (the JSON
-operation layer it calls is fully fuzz-tested — only the keyed round-trip is
-unwired). The UI-frameworks demo tab is built on the **real** shadcn/ui
-(Radix) and Base UI packages, verified across Chromium/Firefox/WebKit.
+what's done vs. what's still open. The one honestly-open item labelled as
+such: a *live* Anthropic-API AI demo (the JSON operation layer it calls is
+fully fuzz-tested — only the keyed round-trip is unwired). The UI-frameworks
+demo tab is built on the **real** shadcn/ui (Radix) and Base UI packages, and
+cross-browser E2E plus visual-regression snapshots run in CI.
 
 ## Run the demo
 
@@ -295,6 +295,7 @@ npm run build      # build core + react (compat: npm run build -w @reflow/compat
 npm test           # 132 unit/integration tests (vitest)
 npm run typecheck  # strict TS across packages
 npm run test:e2e   # cross-browser E2E: Chromium/Firefox/WebKit + touch (Playwright)
+npm run test:e2e:visual  # visual-regression snapshots (Chromium, pinned baselines)
 npm run bench      # reproducible head-to-head benchmark vs React Flow
 ```
 

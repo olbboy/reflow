@@ -23,6 +23,10 @@ contain breaking changes to APIs marked **experimental** in
   WebKit, and a mobile-touch profile (render, drag, undo, connect, 10k
   culling, tap-select). Run with `npm run test:e2e`; wired into CI as a
   dedicated `e2e` job. Replaces the old fire-and-forget console.log smoke.
+- **Visual regression** (`e2e/visual.spec.ts`, `visual` Playwright project):
+  4 masked, animation-frozen snapshots (showcase, framework light/dark,
+  routing). `npm run test:e2e:visual`; baselines are OS-pinned (darwin
+  committed) and CI runs the `visual` job on macOS to match.
 
 ### Fixed
 - **Benchmark now reproducible on any machine.** `benchmarks/run.mjs` (and

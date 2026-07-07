@@ -62,11 +62,11 @@ Legend: ✅ HAVE (code + test/measurement) · 🟡 PARTIAL · ❌ MISSING · ⚠
 | CRDT/Yjs collaborative sync + presence | ✅ | `collab.ts`; `collab.test.ts` (6) + `collab-yjs.test.ts` (2, **real Yjs interop**) pass |
 | Worker + incremental auto-layout | ✅ | `layout-worker.ts`; `layout-worker.test.ts` **7 pass** (real `worker_threads`) |
 | Cross-browser Playwright matrix (Chromium/Firefox/WebKit) + touch | ✅ | `playwright.config.ts` + `e2e/core-flow.spec.ts`; **18 pass** across 4 projects incl. touch tap-select; wired into CI `e2e` job |
+| Visual regression tests | ✅ | `e2e/visual.spec.ts` — 4 masked, animation-frozen snapshots (showcase, framework light/dark, routing); darwin baselines committed; CI `visual` job on macOS; `npm run test:e2e:visual` |
 | Benchmark reproducible by one command on any machine | ⚠️→✅ | **WAS BROKEN** — `run.mjs` hard-coded a CI-only browser path (`/opt/pw-browsers/chromium`); `npm run bench` failed off-CI. Fixed (env/pinned/auto fallback); re-ran locally, ReFlow wins the edit scenario (120 vs 21 fps @10k, ~14× less heap) |
 
 ## Still open (honest)
 
-- Visual regression tests — ❌ not implemented.
 - Live *hosted* docs site — the `examples/docs-site` app exists and builds; it
   is not deployed to a public URL from here.
 - Live Anthropic `/v1/messages` AI E2E — ❌ needs an API key; the JSON op layer
