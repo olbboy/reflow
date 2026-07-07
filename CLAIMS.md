@@ -54,13 +54,25 @@ Legend: ✅ HAVE (code + test/measurement) · 🟡 PARTIAL · ❌ MISSING · ⚠
 | npm-publishable | ✅ | `npm pack --dry-run` clean for both packages; exports/types/sideEffects set |
 | CI runs typecheck+test+build | ✅ | `.github/workflows/ci.yml` |
 
-## Known gaps (see PROGRESS.md for the live list)
+## Differentiation (Tier 3) — verified this cycle
 
-- Orthogonal edge routing with obstacle avoidance — ❌ not implemented
-- CRDT/Yjs collaborative sync — ❌ not implemented
-- Cross-browser Playwright matrix (Firefox/WebKit) + touch E2E — ❌ Chromium only so far
-- Visual regression tests — ❌
-- Live docs site — ❌ (markdown docs only)
-- Overview-mode (all-nodes-visible) pan is paint-bound and slow under software
-  rendering for BOTH libraries; a WebGL/canvas node renderer would be the real
-  fix. Honest limitation, not hidden.
+| Claim | Status | Evidence |
+| --- | --- | --- |
+| Orthogonal routing with obstacle avoidance | ✅ | `routing.ts` (Hanan-grid A* + turn penalty); `routing.test.ts` **7 tests pass** |
+| CRDT/Yjs collaborative sync + presence | ✅ | `collab.ts`; `collab.test.ts` (6) + `collab-yjs.test.ts` (2, **real Yjs interop**) pass |
+| Worker + incremental auto-layout | ✅ | `layout-worker.ts`; `layout-worker.test.ts` **7 pass** (real `worker_threads`) |
+| Cross-browser Playwright matrix (Chromium/Firefox/WebKit) + touch | ✅ | `playwright.config.ts` + `e2e/core-flow.spec.ts`; **18 pass** across 4 projects incl. touch tap-select; wired into CI `e2e` job |
+| Benchmark reproducible by one command on any machine | ⚠️→✅ | **WAS BROKEN** — `run.mjs` hard-coded a CI-only browser path (`/opt/pw-browsers/chromium`); `npm run bench` failed off-CI. Fixed (env/pinned/auto fallback); re-ran locally, ReFlow wins the edit scenario (120 vs 21 fps @10k, ~14× less heap) |
+
+## Still open (honest)
+
+- Visual regression tests — ❌ not implemented.
+- Live *hosted* docs site — the `examples/docs-site` app exists and builds; it
+  is not deployed to a public URL from here.
+- Framework demo on the **real** shadcn/Base UI packages — 🟡 the portal +
+  pointer-isolation pattern those libraries use is proven (`FrameworkScene.tsx`),
+  but it hand-rolls the primitives rather than importing the packages.
+- Live Anthropic `/v1/messages` AI E2E — ❌ needs an API key; the JSON op layer
+  it would call is fully fuzz-tested and the pattern is documented + demoed.
+- Overview-mode (all-nodes-visible) pan is paint-bound for BOTH libraries under
+  software rendering; a WebGL/canvas node renderer would be the real fix.

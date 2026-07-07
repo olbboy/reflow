@@ -8,6 +8,24 @@ contain breaking changes to APIs marked **experimental** in
 
 ## [Unreleased]
 
+### Added — testing & reproducibility
+- **Cross-browser + touch E2E matrix** (`playwright.config.ts`,
+  `e2e/core-flow.spec.ts`): 18 assertion-based tests over Chromium, Firefox,
+  WebKit, and a mobile-touch profile (render, drag, undo, connect, 10k
+  culling, tap-select). Run with `npm run test:e2e`; wired into CI as a
+  dedicated `e2e` job. Replaces the old fire-and-forget console.log smoke.
+
+### Fixed
+- **Benchmark now reproducible on any machine.** `benchmarks/run.mjs` (and
+  `scripts/e2e-smoke.mjs`) hard-coded a CI-only Chromium path
+  (`/opt/pw-browsers/chromium`), so `npm run bench` failed everywhere else.
+  Now resolves the browser from `PLAYWRIGHT_CHROMIUM_PATH` → pinned CI path →
+  Playwright's own install, in that order.
+- **README honesty pass.** The "Honesty" note listed orthogonal routing and
+  CRDT collaboration as not-yet-done, though both ship with passing tests;
+  corrected. Test count updated (67 → 132); dev commands now list
+  `test:e2e` and `bench`.
+
 ### Added — Tier 3 differentiators
 - **Orthogonal edge routing with obstacle avoidance** (`routeOrthogonal`,
   `roundedPath`): Hanan-grid A* with a turn penalty routes edges *around*

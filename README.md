@@ -274,8 +274,12 @@ React Flow app runs on ReFlow's engine (undo/redo and culling included, free):
 Every performance claim here is backed by a reproducible benchmark, and
 every feature by a passing test. [CLAIMS.md](./CLAIMS.md) is a line-by-line
 audit of this README against the code; [PROGRESS.md](./PROGRESS.md) tracks
-what's done vs. what's still missing (orthogonal routing, CRDT collab, and a
-cross-browser test matrix are honestly listed as not-yet-done).
+what's done vs. what's still open. Honestly still open and labelled as such:
+visual-regression tests; a *live* Anthropic-API AI demo (the JSON operation
+layer it calls is fully fuzz-tested — only the keyed round-trip is unwired);
+and a framework demo built on the real shadcn/Base UI packages (the exact
+portal + pointer-isolation pattern those libraries use is already proven in
+the UI-frameworks demo tab, just not yet with the packages themselves).
 
 ## Run the demo
 
@@ -288,10 +292,11 @@ npm run dev   # showcase + 1k/5k/10k stress scenes at http://localhost:5173
 ## Development
 
 ```bash
-npm run build      # build both packages
-npm test           # 67 unit tests (vitest)
+npm run build      # build core + react (compat: npm run build -w @reflow/compat)
+npm test           # 132 unit/integration tests (vitest)
 npm run typecheck  # strict TS across packages
-node scripts/e2e-smoke.mjs  # browser smoke test (requires `npm run dev` on :5199)
+npm run test:e2e   # cross-browser E2E: Chromium/Firefox/WebKit + touch (Playwright)
+npm run bench      # reproducible head-to-head benchmark vs React Flow
 ```
 
 ## Documentation

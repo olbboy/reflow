@@ -9,14 +9,14 @@ reproducible measurement. Gaps are listed plainly, not hidden.
 | --- | --- | --- |
 | npm-publishable (exports/types/sideEffects/peerDeps, semver) | ✅ | `npm pack --dry-run` clean for core/react/compat; `API_STABILITY.md`; `CHANGELOG.md` |
 | CI: typecheck + tests + build | ✅ | `.github/workflows/ci.yml` (build, typecheck, test, demo build, pack verify) |
-| Head-to-head benchmark, reproducible, prod builds, both actually pan | ✅ | `npm run bench` → `benchmarks/BENCHMARKS.md`; movement-verified; ReFlow wins the realistic edit scenario 43 vs 4–9 fps @10k, 13× less memory |
+| Head-to-head benchmark, reproducible, prod builds, both actually pan | ✅ | `npm run bench` → `benchmarks/BENCHMARKS.md`; movement-verified. **Portability bug fixed** (`run.mjs` had a hard-coded CI-only browser path that made `npm run bench` fail on any other machine). Re-run locally: ReFlow wins the edit scenario 120 vs 21 fps @10k, ~14× less heap. |
 | `applyOperations` fuzz test (never-throw) | ✅ | `packages/core/test/ops-fuzz.test.ts` — 30 seeds × hostile input, proto-pollution guard. **Caught 3 real bugs**: two spatial-index infinite-loop DoS (huge dimension / extreme coordinate) and Symbol→number throws — all fixed + regression-tested. |
-| Cross-browser Playwright matrix (Firefox/WebKit) + touch E2E | ❌ | Chromium-only so far. Honest gap. |
+| Cross-browser Playwright matrix (Chromium/Firefox/WebKit) + touch E2E | ✅ | `playwright.config.ts` + `e2e/core-flow.spec.ts` — **18 assertions pass** across Chromium/Firefox/WebKit + mobile-touch (render, drag+move, undo, connect, culling, tap-select). CI `e2e` job installs browsers `--with-deps`. |
 | Visual regression tests | ❌ | Not implemented. |
 
-Gate A: **substantially met.** The core requirements (publishable, CI,
-reproducible honest benchmark, fuzz) are done. Cross-browser matrix and
-visual regression remain.
+Gate A: **substantially met.** Publishable, CI, reproducible honest benchmark
+(now runs on any machine), fuzz, and a real cross-browser + touch E2E matrix
+are done. Visual regression remains.
 
 ## Gate B — UI-framework compatibility
 
@@ -70,8 +70,12 @@ Tier 2: **complete.**
 
 ## Remaining honest gaps (post-Tier 3)
 
-- Cross-browser Playwright matrix (Firefox/WebKit) + touch E2E — still Chromium-only.
 - Visual regression tests — not implemented.
+- Gate B real-library demo — the portal/pointer coexistence pattern is proven,
+  but `FrameworkScene` hand-rolls the primitives rather than importing the
+  actual shadcn/Base UI packages. 🟡
+- Live Anthropic `/v1/messages` AI E2E — needs an API key; the JSON op layer it
+  calls is fully fuzz-tested and the flow is documented + demoed (scripted). ❌
 - Live *hosted* docs site — the site exists and builds; it isn't deployed to a URL here.
 - Overview-mode (all-nodes-visible) pan is paint-bound under software rendering
   for both libraries; a WebGL/canvas node renderer would be the deeper fix.
