@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { waitForViewportStable } from './helpers';
 
 // Real, assertion-based E2E against the production demo build. Runs on the
 // full browser matrix (Chromium / Firefox / WebKit) plus a mobile-touch
@@ -10,6 +11,7 @@ async function gotoShowcase(page: Page) {
   await page.goto('/');
   // The showcase tab is the default scene; wait for its nodes to paint.
   await expect(page.locator(nodeSel('notify'))).toBeVisible();
+  await waitForViewportStable(page); // let the fitView entrance animation settle
 }
 
 async function center(page: Page, selector: string) {
@@ -76,10 +78,6 @@ test.describe('ReFlow core interactions', () => {
 
   test('dragging a node with the mouse moves it', async ({ page }, testInfo) => {
     test.skip(!!testInfo.project.use.isMobile, 'touch is covered separately');
-    // Playwright's Linux WebKit build mishandles synthetic pointer drags on a
-    // node body (it pans instead); real Safari works, and the keyboard-move
-    // test above already covers node repositioning + undo on WebKit.
-    test.skip(testInfo.project.name === 'webkit', 'Playwright Linux WebKit synthetic-drag quirk');
     await gotoShowcase(page);
     const before = await dragBy(page, nodeSel('notify'), 90, 110);
     const end = await page.locator(nodeSel('notify')).boundingBox();

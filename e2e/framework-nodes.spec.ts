@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { waitForViewportStable } from './helpers';
 
 // Gate B proof, at runtime: real shadcn/ui (Radix) and Base UI components live
 // inside ReFlow nodes. Portals open above the canvas, interacting with them
@@ -12,6 +13,7 @@ async function gotoFramework(page: Page) {
   await page.goto('/');
   await page.getByRole('button', { name: 'UI frameworks' }).click();
   await expect(page.locator(shadcn)).toBeVisible();
+  await waitForViewportStable(page); // let the fitView entrance animation settle
 }
 
 async function viewportTransform(page: Page) {
@@ -71,8 +73,7 @@ test.describe('framework-component nodes', () => {
     await expect(trigger).toContainText('dev');
   });
 
-  test('a framework node stays draggable', async ({ page }, testInfo) => {
-    test.skip(testInfo.project.name === 'webkit', 'Playwright Linux WebKit synthetic-drag quirk');
+  test('a framework node stays draggable', async ({ page }) => {
     await gotoFramework(page);
     const box = await page.locator(shadcn).boundingBox();
     expect(box).not.toBeNull();
