@@ -8,6 +8,23 @@ contain breaking changes to APIs marked **experimental** in
 
 ## [Unreleased]
 
+### Added — Tier 3 differentiators
+- **Orthogonal edge routing with obstacle avoidance** (`routeOrthogonal`,
+  `roundedPath`): Hanan-grid A* with a turn penalty routes edges *around*
+  nodes. New `'orthogonal'` edge type re-routes live as obstacles move
+  (`store.edgeObstacles`, `store.graphVersion`).
+- **Real-time collaboration** (`Collab`, `Presence`): transport-agnostic,
+  zero-dependency; Lamport-clock last-write-wins gives order-independent
+  convergence. Verified against a real Yjs CRDT. `RemoteCursors` React
+  component. `store.applyRemotePatch`.
+- **Worker + incremental layout**: `runLayoutJob`/`layoutWorkerHandler`/
+  `layoutInWorker` run layouts off the main thread (tested in a real
+  `worker_threads` worker); `incrementalLayout` places new nodes without
+  moving the existing graph; `layoutAsync`/`layoutIncremental` on the React
+  API.
+- **Interactive docs site** (`examples/docs-site`, `npm run dev:docs`): six
+  live, runnable examples with source shown side-by-side.
+
 ### Added
 - **`@reflow/compat`** — React Flow (xyflow) API compatibility layer.
   Migrate an existing React Flow app by changing imports: `ReactFlow`,

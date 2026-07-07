@@ -2,7 +2,7 @@
   "name": "reflow-monorepo",
   "private": true,
   "version": "0.1.0",
-  "description": "ReFlow — the fastest, most beautiful open source library for building node-based UIs with React",
+  "description": "ReFlow \u2014 the fastest, most beautiful open source library for building node-based UIs with React",
   "workspaces": [
     "packages/*",
     "examples/*",
@@ -15,7 +15,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc -p packages/core/tsconfig.build.json --noEmit && tsc -p packages/react/tsconfig.build.json --noEmit && tsc -p packages/compat/tsconfig.build.json --noEmit",
-    "bench": "npm run bench -w reflow-benchmarks"
+    "bench": "npm run bench -w reflow-benchmarks",
+    "dev:docs": "npm run dev -w reflow-docs-site",
+    "build:docs": "npm run build -w reflow-docs-site"
   },
   "devDependencies": {
     "@testing-library/react": "^16.1.0",

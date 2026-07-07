@@ -33,6 +33,8 @@ add-on:
 | MiniMap | ✅ Canvas (no per-node React elements) | ⚠️ One SVG React element per node |
 | Typed ports | ✅ `dataType` + `maxConnections` on handles, cycle prevention | ⚠️ Single `isValidConnection` callback |
 | AI-agent integration | ✅ JSON operations + validated executor, LLM tool schema, graph→Mermaid | ❌ DIY |
+| Orthogonal routing w/ obstacle avoidance | ✅ Edges route **around** nodes (A*), re-route live | ❌ Edges cross nodes |
+| Real-time collaboration | ✅ Transport-agnostic CRDT-style sync + presence, Yjs-ready | ❌ DIY |
 | Migration path | ✅ `@reflow/compat` — drop-in React Flow API adapter | — |
 | Copy / paste / duplicate | ✅ Built in (⌘C/V/D/X), id-remapped, one undo | ⚠️ DIY |
 | NodeResizer / NodeToolbar / edge reconnect | ✅ Built in | ✅ (some Pro) |
@@ -296,10 +298,17 @@ node scripts/e2e-smoke.mjs  # browser smoke test (requires `npm run dev` on :519
 
 - [Getting started](./docs/getting-started.md)
 - [Custom nodes & edges](./docs/custom-nodes.md)
+- [Auto-layout: built-in, incremental, off-thread](./docs/layout.md)
+- [Real-time collaboration (+ Yjs)](./docs/collaboration.md)
 - [AI agent integration](./docs/ai-integration.md)
+- [Migrating from React Flow](./docs/migration.md)
 - [Tailwind / shadcn / Radix / Base UI](./docs/integrations.md)
 - [Performance guide](./docs/performance.md)
 - [Core concepts & API](./docs/api.md)
+
+**Interactive examples:** `npm run dev:docs` — a live gallery (basic flow,
+custom nodes, auto-layout, smart routing, AI ops, collaboration) with source
+shown side-by-side.
 
 ## License
 

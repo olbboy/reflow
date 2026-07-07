@@ -59,14 +59,22 @@ fully tested and the pattern is documented + demoed.
 
 Tier 2: **complete.**
 
-## Tier 3 (differentiation) — not yet done, stated honestly
+## Tier 3 (differentiation) — DONE
 
-| Item | Status |
-| --- | --- |
-| Orthogonal edge routing with obstacle avoidance | ❌ Not started. High value; large. Candidate for next milestone. |
-| Collaborative (Yjs/CRDT) sync + presence | ❌ Not started. The store's commit/transaction model is a clean seam for it. |
-| Interactive docs site with live examples | ❌ Markdown docs only. |
-| Worker-based incremental auto-layout | 🟡 Layouts exist and are fast synchronously; not yet offloaded to a worker. |
+| Item | Status | Evidence |
+| --- | --- | --- |
+| Orthogonal edge routing with obstacle avoidance | ✅ | `packages/core/src/routing.ts` (Hanan-grid A* + turn penalty); `routing.test.ts` (7 tests: avoids single/stacked obstacles, own-node exclusion, fallback, perf); `'orthogonal'` edge type re-routes live; demo "Smart routing" tab + docs-site example. |
+| Collaborative sync + presence | ✅ | `packages/core/src/collab.ts` — transport-agnostic `Collab` (Lamport-clock LWW, order-independent convergence) + `Presence`; `collab.test.ts` + `collab-yjs.test.ts` (**real Yjs CRDT interop**); `RemoteCursors` component; docs/collaboration.md; live two-peer docs-site example (verified cross-panel sync). |
+| Worker-based + incremental auto-layout | ✅ | `layout-worker.ts` `runLayoutJob`/`layoutInWorker` (runs in a real `worker_threads` Worker — `layout-worker.test.ts`); `incrementalLayout` places new nodes without moving the graph; `layoutAsync`/`layoutIncremental` on the React API; docs/layout.md. |
+| Interactive docs site with live examples | ✅ | `examples/docs-site` — 6 live, runnable examples with source shown side-by-side (Basic, Custom nodes, Auto-layout, Smart routing, AI ops, Collaboration). `npm run dev:docs`. All examples verified rendering + interacting in a browser. |
+
+## Remaining honest gaps (post-Tier 3)
+
+- Cross-browser Playwright matrix (Firefox/WebKit) + touch E2E — still Chromium-only.
+- Visual regression tests — not implemented.
+- Live *hosted* docs site — the site exists and builds; it isn't deployed to a URL here.
+- Overview-mode (all-nodes-visible) pan is paint-bound under software rendering
+  for both libraries; a WebGL/canvas node renderer would be the deeper fix.
 
 ## Honest bottom line
 
@@ -79,6 +87,11 @@ Tier 2: **complete.**
   scenario (FPS and memory), ties it in the all-visible overview (both
   paint-bound under software rendering), ships a working migration adapter,
   closes the Tier 2 parity gaps, and has a real AI operation layer.
-- Not yet #1-defensible without Tier 3 (obstacle-avoiding routing, CRDT
-  collab, a docs site) and a cross-browser test matrix. Those are the honest
-  remaining bars.
+- **Tier 3 is now done**: obstacle-avoiding orthogonal routing, transport-agnostic
+  collaboration with real Yjs interop + presence, worker/incremental layout, and
+  an interactive docs site — each with tests or browser-verified evidence. This
+  puts ReFlow ahead of React Flow on routing (neither had it), collaboration
+  (React Flow leaves it to you), and ships an AI-native operation layer.
+- The honest remaining bars to be unambiguously "#1" are operational, not
+  feature gaps: a cross-browser/touch test matrix, visual regression, a hosted
+  docs site, and — for the extreme all-visible-at-once case — a WebGL renderer.
