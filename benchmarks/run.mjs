@@ -12,6 +12,7 @@
 import { chromium } from 'playwright';
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { join, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -41,11 +42,13 @@ const server = createServer(async (req, res) => {
 });
 await new Promise((r) => server.listen(PORT, r));
 
-const browser = await chromium.launch({
-  executablePath: '/opt/pw-browsers/chromium',
-  headless: true,
-  args: ['--js-flags=--expose-gc'],
-});
+// Browser resolution, in priority order, so `npm run bench` runs anywhere:
+//  1) PLAYWRIGHT_CHROMIUM_PATH env override, 2) the CI image's pinned path if
+//  present, 3) Playwright's own installed browser (default local dev).
+const pinnedChromium = process.env.PLAYWRIGHT_CHROMIUM_PATH || '/opt/pw-browsers/chromium';
+const launchOpts = { headless: true, args: ['--js-flags=--expose-gc'] };
+if (existsSync(pinnedChromium)) launchOpts.executablePath = pinnedChromium;
+const browser = await chromium.launch(launchOpts);
 
 /**
  * Drive a real pan for `ms` and count animation frames. Dispatches BOTH

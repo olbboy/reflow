@@ -1,10 +1,15 @@
 import { chromium } from 'playwright';
 
 // Usage: npm run dev -- --port 5199  (in examples/demo), then: node scripts/e2e-smoke.mjs
-import { mkdirSync } from 'node:fs';
+import { mkdirSync, existsSync } from 'node:fs';
 const SCRATCH = process.env.SHOTS_DIR ?? 'screenshots';
 mkdirSync(SCRATCH, { recursive: true });
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', headless: true });
+// Portable browser resolution: pinned CI path if present, else Playwright's own.
+const pinnedChromium = process.env.PLAYWRIGHT_CHROMIUM_PATH || '/opt/pw-browsers/chromium';
+const browser = await chromium.launch({
+  ...(existsSync(pinnedChromium) ? { executablePath: pinnedChromium } : {}),
+  headless: true,
+});
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 
 const errors = [];
