@@ -8,137 +8,69 @@ contain breaking changes to APIs marked **experimental** in
 
 ## [Unreleased]
 
-### Added — tooling
-- **ESLint (flat config) wired into CI.** `eslint.config.mjs` runs
-  typescript-eslint + react-hooks across packages, tests, examples and the
-  build/bench scripts; `npm run lint` (and `lint:fix`). The first pass fixed
-  ~20 real issues — dead code (an unused collab test helper, a stray `rows`
-  binding), unused imports, a ternary-as-statement, and a redundant regex
-  escape. CI's `test` job now lints before building.
-
-### Added — AI agent (Gate C)
-- **Provider-agnostic live AI bridge** (`examples/ai-agent`). A zero-SDK
-  `fetch` adapter turns a natural-language goal into validated ReFlow
-  operations using whichever key is set — **GLM** (z.ai, `glm-4.6`),
-  **Gemini** (`gemini-2.5-flash`) or **Anthropic** (`claude-sonnet-5`) — and
-  applies them as one transactional turn (a single `undo()` reverts the whole
-  agent edit). `npm run generate -w reflow-ai-agent` / `node
-  examples/ai-agent/generate.mjs "<goal>"`. Twelve tests
-  (`agent-ops.test.ts`) cover parse→validate→apply→undo for all three
-  provider response shapes with canned data; the keyed round-trip runs via the
-  CLI. See `docs/ai-integration.md`.
-
-### Fixed — packaging
-- **Built packages now load under native Node ESM.** `tsc`
-  (`moduleResolution: bundler`) emitted extensionless relative imports, so
-  `import '@reflow/core'` threw `ERR_MODULE_NOT_FOUND` in plain Node even
-  though bundlers (Vite/Vitest) resolved it — the published packages were
-  effectively broken for Node consumers. A post-build codemod
-  (`scripts/append-js-extensions.mjs`) appends `.js` to relative specifiers in
-  the emitted `.js`/`.d.ts`, and CI now `import()`s each built package under
-  Node so this can't regress.
-
-### Added — UI-framework integration (Gate B)
-- **Real shadcn/ui + Base UI nodes in the demo.** The "UI frameworks" tab now
-  renders a node built from actual shadcn/ui Card + Select + Popover (the real
-  `@radix-ui/react-select` / `@radix-ui/react-popover`) and a node built from
-  real `@base-ui-components/react` Select + Popover. Tailwind runs with
-  preflight disabled so it can't reset host styles. `e2e/framework-nodes.spec.ts`
-  (5 tests × Chromium/Firefox/WebKit) proves the portals open above the canvas,
-  selecting an option never pans the viewport, and the nodes stay draggable.
-
-### Added — testing & reproducibility
-- **Cross-browser + touch E2E matrix** (`playwright.config.ts`,
-  `e2e/core-flow.spec.ts`): 18 assertion-based tests over Chromium, Firefox,
-  WebKit, and a mobile-touch profile (render, drag, undo, connect, 10k
-  culling, tap-select). Run with `npm run test:e2e`; wired into CI as a
-  dedicated `e2e` job. Replaces the old fire-and-forget console.log smoke.
-- **Visual regression** (`e2e/visual.spec.ts`, `visual` Playwright project):
-  4 masked, animation-frozen snapshots (showcase, framework light/dark,
-  routing). `npm run test:e2e:visual`; baselines are OS-pinned (darwin
-  committed) and CI runs the `visual` job on macOS to match.
-
-### Fixed
-- **Benchmark now reproducible on any machine.** `benchmarks/run.mjs` (and
-  `scripts/e2e-smoke.mjs`) hard-coded a CI-only Chromium path
-  (`/opt/pw-browsers/chromium`), so `npm run bench` failed everywhere else.
-  Now resolves the browser from `PLAYWRIGHT_CHROMIUM_PATH` → pinned CI path →
-  Playwright's own install, in that order.
-- **README honesty pass.** The "Honesty" note listed orthogonal routing and
-  CRDT collaboration as not-yet-done, though both ship with passing tests;
-  corrected. Test count updated (67 → 132); dev commands now list
-  `test:e2e` and `bench`.
-
-### Added — Tier 3 differentiators
-- **Orthogonal edge routing with obstacle avoidance** (`routeOrthogonal`,
-  `roundedPath`): Hanan-grid A* with a turn penalty routes edges *around*
-  nodes. New `'orthogonal'` edge type re-routes live as obstacles move
-  (`store.edgeObstacles`, `store.graphVersion`).
-- **Real-time collaboration** (`Collab`, `Presence`): transport-agnostic,
-  zero-dependency; Lamport-clock last-write-wins gives order-independent
-  convergence. Verified against a real Yjs CRDT. `RemoteCursors` React
-  component. `store.applyRemotePatch`.
-- **Worker + incremental layout**: `runLayoutJob`/`layoutWorkerHandler`/
-  `layoutInWorker` run layouts off the main thread (tested in a real
-  `worker_threads` worker); `incrementalLayout` places new nodes without
-  moving the existing graph; `layoutAsync`/`layoutIncremental` on the React
-  API.
-- **Interactive docs site** (`examples/docs-site`, `npm run dev:docs`): six
-  live, runnable examples with source shown side-by-side.
-
 ### Added
-- **`@reflow/compat`** — React Flow (xyflow) API compatibility layer.
-  Migrate an existing React Flow app by changing imports: `ReactFlow`,
-  `Handle` (`type`/`position`), `Position`, `MarkerType`, `useReactFlow`,
-  `useNodesState`/`useEdgesState`, `applyNodeChanges`/`applyEdgeChanges`,
-  `addEdge`, `reconnectEdge`, `ReactFlowProvider`.
-- **NodeResizer** — 8-grip drag-to-resize with min/max + aspect ratio; one
-  undo entry per gesture.
-- **NodeToolbar** — floating, zoom-stable per-node toolbar.
-- **Edge reconnection** — drag a selected edge's endpoint to a new handle
-  (validated); drop-to-void deletes, invalid target reverts.
-- **Clipboard** — `copy` / `paste` / `duplicateSelection` on the store,
-  wired to ⌘C/⌘V/⌘D/⌘X; groups copy with children, ids remapped, one undo.
-- **Accessibility** — focusable nodes (`tabIndex`, `role`, `aria-label`,
-  `aria-selected`, `aria-roledescription`), focus-selects, focus ring,
-  Alt+Arrow spatial navigation, `store.nearestNodeInDirection`.
-- **`useOnSelectionChange`**, **`useSelectionCount`** hooks.
-- **Head-to-head benchmark harness** (`npm run bench`) vs React Flow with
-  movement verification; results in [benchmarks/BENCHMARKS.md](./benchmarks/BENCHMARKS.md).
-- **Fuzz tests** for `applyOperations` (never-throw / no-corruption guarantee).
+- **`@reflow/compat`** — a React Flow (xyflow) API-compatibility layer. Migrate
+  an existing app by changing imports: `ReactFlow`, `Handle` (`type`/`position`),
+  `Position`, `MarkerType`, `useReactFlow`, `useNodesState`/`useEdgesState`,
+  `applyNodeChanges`/`applyEdgeChanges`, `addEdge`, `reconnectEdge`,
+  `ReactFlowProvider`. See [docs/migration.md](./docs/migration.md).
+- **Orthogonal edge routing with obstacle avoidance** — the `'orthogonal'` edge
+  type routes *around* nodes (Hanan-grid A* + turn penalty) and re-routes live
+  as obstacles move.
+- **Real-time collaboration** — transport-agnostic `Collab` (Lamport-clock
+  last-write-wins, order-independent convergence), `Presence`, and a
+  `RemoteCursors` component. Verified against a real Yjs CRDT.
+- **Off-thread + incremental auto-layout** — `layoutInWorker` runs layouts in a
+  real `worker_threads` worker; `incrementalLayout` places new nodes without
+  moving the existing graph; `layoutAsync` / `layoutIncremental` on the React API.
+- **Provider-agnostic AI agent** (`examples/ai-agent`) — a zero-SDK `fetch`
+  bridge that turns a natural-language goal into validated operations using GLM,
+  Gemini or Anthropic (whichever key is set) and applies them as one
+  transactional turn. See [docs/ai-integration.md](./docs/ai-integration.md).
+- **Real shadcn/ui + Base UI demo nodes** — the "UI frameworks" tab builds nodes
+  from the actual `@radix-ui/*` and `@base-ui-components/react` primitives.
+- **NodeResizer** (8-grip, min/max + aspect ratio), **NodeToolbar**
+  (zoom-stable), **edge reconnection** (drag an endpoint to a new handle), and a
+  **clipboard** (`copy` / `paste` / `duplicateSelection`, ⌘C/V/D/X, id-remapped).
+- **Accessibility** — focusable nodes (`tabIndex`, `role`, `aria-*`), a focus
+  ring, focus-selects, and Alt+Arrow spatial navigation.
+- **Hooks** — `useOnSelectionChange`, `useSelectionCount`.
+- **Testing & tooling** — a head-to-head benchmark harness (`npm run bench`),
+  `applyOperations` fuzz tests, a cross-browser + touch Playwright matrix
+  (`npm run test:e2e`), visual-regression snapshots (`npm run test:e2e:visual`),
+  and ESLint (`npm run lint`) — all wired into CI.
+- **Interactive docs site** (`examples/docs-site`, `npm run dev:docs`).
 
 ### Fixed
-- **Spatial-index DoS (2 variants), caught by the new fuzz test** — a node
-  with a huge dimension (e.g. `height: 1e308`) or an extreme coordinate made
-  `SpatialIndex.cellKeys` loop effectively forever (the second case because
-  `index++` stops advancing past 2⁵³). Both now flag the rect as "oversized"
-  and keep it out of the grid. Directly relevant to validating agent/LLM
-  output — a hostile node size could otherwise freeze the app.
-- **`applyOperations` input sanitization** — numeric fields (position, width,
-  height) are coerced to finite, range-clamped numbers; ids/handles/labels to
-  strings; node/edge id lists to string arrays. A `Symbol`, `NaN`, or
-  non-array previously reached arithmetic/`for…of` and threw, violating the
-  never-throw contract. Fuzz-tested across 30 seeds.
+- **Built packages now load under native Node ESM.** `tsc` emitted extensionless
+  relative imports, so `import '@reflow/core'` threw `ERR_MODULE_NOT_FOUND` in
+  plain Node even though bundlers resolved it. A post-build codemod appends `.js`
+  to relative specifiers in the emitted output, and CI now `import()`s each built
+  package under Node so it can't regress.
+- **Benchmark runs on any machine.** `benchmarks/run.mjs` hard-coded a CI-only
+  Chromium path; it now resolves the browser from `PLAYWRIGHT_CHROMIUM_PATH` →
+  the pinned CI path → Playwright's own install.
 - **Culling regression** — zooming in from an all-visible overview left every
-  node rendered because the pan-hysteresis skipped the re-cull when the new
-  (smaller) view was contained in the old region. Culling now re-runs on any
-  zoom change. This was the single biggest real-world performance bug; it cut
-  10k-node zoomed-in DOM nodes from 10,000 to ~143 and pan from ~4fps to ~44fps.
-- Duplicate-edge detection now treats synthetic default-handle ids
-  (`__source`/`__target`) as equal to unset handles.
-- `useFlowSelector` no longer corrupts topic names whose ids contain the
-  previous `|` join separator.
-- Per-edge version counters are cleaned up on edge removal (no small leak).
+  node rendered because the pan-hysteresis skipped the re-cull. Culling now
+  re-runs on any zoom change (10k zoomed-in DOM nodes dropped from 10,000 to ~143).
+- **Spatial-index DoS (2 variants)** — a huge node dimension or an extreme
+  coordinate made `SpatialIndex.cellKeys` loop nearly forever; oversized rects
+  are now kept out of the grid. Caught by the fuzz test.
+- **`applyOperations` input sanitization** — numeric fields are coerced to
+  finite, range-clamped numbers and ids/labels to strings, so a `Symbol`, `NaN`
+  or non-array can't break the never-throw contract.
+- Duplicate-edge detection treats default-handle ids as unset; `useFlowSelector`
+  no longer corrupts topics whose ids contain `|`; per-edge version counters are
+  freed on edge removal.
 
 ### Changed
-- README performance claims replaced with a reproducible, movement-verified
-  benchmark. The earlier "~55fps" figure was unverified and has been removed —
-  see [CLAIMS.md](./CLAIMS.md) for the full honesty audit.
+- README performance claims are now a reproducible, movement-verified benchmark;
+  the earlier unverified "~55 fps" figure was removed. See
+  [CLAIMS.md](./CLAIMS.md) for the honesty audit.
 
 ## [0.1.0] — initial
 
-- `@reflow/core`: headless engine — reactive store, spatial-hash culling,
-  edge path math, five auto-layouts, undo/redo, graph algorithms, AI
-  operations layer.
+- `@reflow/core`: headless engine — reactive store, spatial-hash culling, edge
+  path math, five auto-layouts, undo/redo, graph algorithms, AI operations layer.
 - `@reflow/react`: renderer — `<ReFlow>`, `Handle`, `Background`, `MiniMap`
   (canvas), `Controls`, `Panel`, hooks, light/dark theme.

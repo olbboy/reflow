@@ -274,14 +274,13 @@ React Flow app runs on ReFlow's engine (undo/redo and culling included, free):
 
 ## Honesty
 
-Every performance claim here is backed by a reproducible benchmark, and
-every feature by a passing test. [CLAIMS.md](./CLAIMS.md) is a line-by-line
-audit of this README against the code; [PROGRESS.md](./PROGRESS.md) tracks
-what's done vs. what's still open. The one honestly-open item labelled as
-such: a *live* Anthropic-API AI demo (the JSON operation layer it calls is
-fully fuzz-tested — only the keyed round-trip is unwired). The UI-frameworks
-demo tab is built on the **real** shadcn/ui (Radix) and Base UI packages, and
-cross-browser E2E plus visual-regression snapshots run in CI.
+Every performance claim here is backed by a reproducible benchmark, and every
+feature by a passing test. [CLAIMS.md](./CLAIMS.md) is the line-by-line audit
+of this README against the code, and lists the honest limitations plainly
+(SSR render test, shadow-DOM isolation, and a WebGL renderer for the
+everything-on-screen case). The UI-frameworks demo is built on the **real**
+shadcn/ui (Radix) and Base UI packages, and lint, cross-browser E2E and
+visual-regression snapshots all run in CI.
 
 ## Run the demo
 
