@@ -95,6 +95,10 @@ Two token-efficient views of the canvas:
 describeGraph(store);
 // { nodes: [{ id, type, label }...], edges: [{ source, target, label }...], selection }
 
+// Positions and full node data are omitted by default to save tokens; opt in
+// when the agent needs to reason about layout or node internals:
+describeGraph(store, { includePositions: true, includeData: true });
+
 toMermaid(store);
 // flowchart LR
 //   fetch["Fetch data"] ...

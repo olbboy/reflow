@@ -125,6 +125,7 @@ Full token list in [`packages/react/src/styles.css`](../packages/react/src/style
 
 ## SSR
 
-`@reflow/core` is DOM-free. `@reflow/react` guards all browser APIs —
-`<ReFlow>` renders on the server and hydrates cleanly; measurements and
-culling kick in on mount.
+`@reflow/core` is DOM-free. `@reflow/react` guards all browser APIs, so
+`<ReFlow>` renders on the server without throwing; measurements and culling
+kick in on mount. Server rendering is guarded in code but not yet covered by
+an automated SSR render test — see [CLAIMS.md](../CLAIMS.md).

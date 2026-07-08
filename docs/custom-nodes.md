@@ -32,6 +32,8 @@ function MetricNode({ id, data, selected }: NodeProps<MetricData>) {
 
 Notes:
 
+- `NodeProps` gives you `id`, `data`, `node`, `selected` **and `dragging`** —
+  use `dragging` to restyle a node while it's being moved.
 - **Size is measured automatically** (one shared ResizeObserver). Set
   `node.width`/`node.height` to skip measurement — worth doing for
   huge graphs of fixed-size nodes.
@@ -60,6 +62,7 @@ const id = useNodeId();
   id="out-2"             // required when a node has several of one kind
   dataType="image"       // typed port: only equal dataTypes connect
   maxConnections={1}     // reject when full
+  connectable={false}    // disable interaction for this handle
 />
 ```
 
@@ -118,6 +121,42 @@ const nodes = [
   renders.
 - `extent: 'parent'` keeps children inside while dragging.
 - Deleting a parent re-parents children to the root (positions preserved).
+- `group` is a **built-in node type** — so are `default`, `input` and
+  `output`. You don't register them in `nodeTypes`; supply your own component
+  under that key to override one.
+
+## Resizing & toolbars
+
+Drop `NodeResizer` or `NodeToolbar` inside a custom node:
+
+```tsx
+import { NodeResizer, NodeToolbar, type NodeProps } from '@reflow/react';
+
+function CardNode({ selected }: NodeProps) {
+  return (
+    <div className="card">
+      {/* 8-grip drag-to-resize; the whole gesture is one undo entry */}
+      <NodeResizer minWidth={120} maxWidth={480} />
+      {/* floating toolbar, zoom-stable, shown while the node is selected */}
+      <NodeToolbar position="top" align="center" offset={8}>
+        <button>Edit</button>
+        <button>Delete</button>
+      </NodeToolbar>
+      …
+    </div>
+  );
+}
+```
+
+- **`NodeResizer`** — `minWidth` (40), `maxWidth` (∞), `keepAspectRatio`
+  (false), `color`, `onResize`, `onResizeEnd`. Writes `width`/`height` (and
+  `position` for top/left grips) live.
+- **`NodeToolbar`** — `position` (`'top'` or any side), `align`
+  (`'start' | 'center' | 'end'`), `offset` (8px), `isVisible` (defaults to the
+  node's selected state). It keeps a constant on-screen size as you zoom.
+
+Both are marked **experimental** in [API_STABILITY.md](../API_STABILITY.md) —
+their styling hooks may change before 1.0.
 
 ## Validation
 

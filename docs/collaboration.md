@@ -92,9 +92,10 @@ const presence = new Presence({
 });
 
 // Broadcast your cursor as it moves (in flow coordinates):
-onPointerMove = (e) => presence.update({ cursor: api.screenToFlow({ x: e.clientX, y: e.clientY }) });
-// And your selection:
-useOnSelectionChange(({ nodes }) => presence.update({ selection: nodes }));
+const flow = useReflow();
+onPointerMove = (e) => presence.update({ cursor: flow.screenToFlow({ x: e.clientX, y: e.clientY }) });
+// And your selection (PeerState.selection is a string[] of node ids):
+useOnSelectionChange(({ nodes }) => presence.update({ selection: nodes.map((n) => n.id) }));
 ```
 
 Render remote peers with the `RemoteCursors` helper from `@reflow/react`:

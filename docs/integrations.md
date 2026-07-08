@@ -107,7 +107,9 @@ Same story — components in nodes, portals for overlays. Two tips:
 
 ## Next.js / SSR
 
-`<ReFlow>` is SSR-safe (all browser APIs are guarded; measurement and
-culling activate on mount). In the App Router mark the flow component
-`'use client'`. `@reflow/core` runs natively in server code — validation,
-layouts and graph algorithms work in route handlers and server actions.
+`<ReFlow>` renders without throwing on the server — all browser APIs are
+guarded, and measurement and culling activate on mount (guarded in code, not
+yet covered by an automated SSR render test). In the App Router mark the flow
+component `'use client'`. `@reflow/core` runs natively in server code —
+validation, layouts and graph algorithms work in route handlers and server
+actions.
