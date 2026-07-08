@@ -1,7 +1,7 @@
 {
   "name": "realflow-monorepo",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "RealFlow — the fastest, most beautiful open source library for building node-based UIs with React",
   "workspaces": [
     "packages/*",

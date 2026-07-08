@@ -8,6 +8,12 @@ contain breaking changes to APIs marked **experimental** in
 
 ## [Unreleased]
 
+## [0.2.1] — 2026-07-08
+
+### Added
+- Per-package READMEs for `@realflow/core`, `@realflow/react` and
+  `@realflow/compat` so each package page on npm has full documentation.
+
 ## [0.2.0] — 2026-07-08
 
 ### Added

@@ -1,6 +1,6 @@
 {
   "name": "@realflow/core",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Headless, zero-dependency engine for node-based UIs: reactive graph store, spatial indexing, auto-layout, undo/redo, interactions.",
   "license": "MIT",
   "publishConfig": {
