@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "The fastest, most beautiful React library for building node-based UIs. Fine-grained rendering, built-in auto-layout, undo/redo, alignment guides \u2014 free and open source.",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

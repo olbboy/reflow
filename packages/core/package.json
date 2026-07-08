@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Headless, zero-dependency engine for node-based UIs: reactive graph store, spatial indexing, auto-layout, undo/redo, interactions.",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
